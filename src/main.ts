@@ -1,39 +1,54 @@
-import { TV } from "./devices/TV";
-import { Projetor } from "./devices/Projetor";
-import { Receiver } from "./devices/Receiver";
-import { PlayerMidia } from "./devices/PlayerMidia";
-import { SistemaSom } from "./devices/SistemaSom";
-import { LuzAmbiente } from "./devices/LuzAmbiente";
+import readline from "node:readline/promises";
+import { stdin as input, stdout as output } from "node:process";
 import { HomeTheaterFacade } from "./facade/HomeTheaterFacade";
 
-const tv = new TV();
-const projetor = new Projetor();
-const receiver = new Receiver();
-const playerMidia = new PlayerMidia();
-const sistemaSom = new SistemaSom();
-const luzAmbiente = new LuzAmbiente();
+async function main(): Promise<void> {
+  const rl = readline.createInterface({ input, output });
+  const homeTheater = new HomeTheaterFacade();
 
-const homeTheater = new HomeTheaterFacade(
-  tv,
-  projetor,
-  receiver,
-  playerMidia,
-  sistemaSom,
-  luzAmbiente
-);
+  while (true) {
+    console.log("\n=== Home Theater ===");
+    console.log("1 - Assistir filme");
+    console.log("2 - Ouvir musica");
+    console.log("3 - Desligar sistema");
+    console.log("0 - Sair");
 
-for (const mensagem of homeTheater.assistirFilme("")) {
-  console.log(mensagem);
+    const opcao = (await rl.question("Escolha uma opcao: ")).trim();
+
+    if (opcao === "0") {
+      break;
+    }
+
+    if (opcao === "1") {
+      const nomeFilme = await rl.question("Digite o nome do filme: ");
+      const resultado = homeTheater.assistirFilme(nomeFilme.trim());
+      for (const mensagem of resultado) {
+        console.log(mensagem);
+      }
+      continue;
+    }
+
+    if (opcao === "2") {
+      const nomeMusica = await rl.question("Digite o nome da musica: ");
+      const resultado = homeTheater.ouvirMusica(nomeMusica.trim());
+      for (const mensagem of resultado) {
+        console.log(mensagem);
+      }
+      continue;
+    }
+
+    if (opcao === "3") {
+      const resultado = homeTheater.desligarSistema();
+      for (const mensagem of resultado) {
+        console.log(mensagem);
+      }
+      continue;
+    }
+
+    console.log("Opcao invalida.");
+  }
+
+  rl.close();
 }
 
-for (const mensagem of homeTheater.desligarSistema()) {
-  console.log(mensagem);
-}
-
-for (const mensagem of homeTheater.ouvirMusica("")) {
-  console.log(mensagem);
-}
-
-for (const mensagem of homeTheater.desligarSistema()) {
-  console.log(mensagem);
-}
+main();

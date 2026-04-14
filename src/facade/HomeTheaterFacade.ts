@@ -6,14 +6,21 @@ import { SistemaSom } from "../devices/SistemaSom";
 import { LuzAmbiente } from "../devices/LuzAmbiente";
 
 export class HomeTheaterFacade {
-  constructor(
-    private tv: TV,
-    private projetor: Projetor,
-    private receiver: Receiver,
-    private playerMidia: PlayerMidia,
-    private sistemaSom: SistemaSom,
-    private luzAmbiente: LuzAmbiente
-  ) {}
+  private tv: TV;
+  private projetor: Projetor;
+  private receiver: Receiver;
+  private playerMidia: PlayerMidia;
+  private sistemaSom: SistemaSom;
+  private luzAmbiente: LuzAmbiente;
+
+  constructor() {
+    this.tv = new TV();
+    this.projetor = new Projetor();
+    this.receiver = new Receiver();
+    this.playerMidia = new PlayerMidia();
+    this.sistemaSom = new SistemaSom();
+    this.luzAmbiente = new LuzAmbiente();
+  }
 
   assistirFilme(nomeFilme: string): string[] {
     return [
